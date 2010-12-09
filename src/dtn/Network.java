@@ -5,39 +5,36 @@
 
 package dtn;
 
+import java.util.ArrayList;
+import java.util.Queue;
+
 /**
  *
  * @author Renegade
  */
 public class Network {
 
-    final double VEL = 0.1;
-    final int N= 1000;
-    final double L=1000;
-    final int TI = 500;
-    final int TR = 50;
+    final int NUM_NODES = 1000;
+    final double L = 1000;
+
     final double GS_0=0.0316;
-    Node agentList[];
-    Node infectedList[];
-    double initialDistance[];
-    int currentInfected;
-    int routingTime[];
+    Node[] agentList;
+    Queue<Node> infectedList;
+    
     int currentTime;
-    int y;
 
     public Network() {
-
-        y = 1;
         currentTime = 0;
-        infectedList = new Node[N];
-        agentList = new Node[N];
-        agentList[0]=new Node(L);
-        for (int i=1; i<N; i++)
-            agentList[i]=new Node(agentList[0], L);
-        for (int i=0; i<N; i++)
+       
+        agentList = new Node[NUM_NODES];
+        agentList[0] = new Node(L);
+        for (int i = 1; i < agentList.length; i++) {
+            agentList[i] = new Node(agentList[0], L);
+        }
+        for (int i=0; i<agentList.length; i++) {
             agentList[i].initializeConnected();
-        infectedList[0] = agentList[0];
-        currentInfected=1;
+        }
+        infectedList.add(agentList[0]);
 
     }
 
@@ -45,18 +42,18 @@ public class Network {
 
         int i;
         int shift=0;
-        int numberInfected=currentInfected;
-        while(y < N) {
+        int y = 1;
+        while(y < NUM_NODES) {
             currentTime++;
-            for (i=0; i<N; i++) {
-                agentList[i].updatePosition(VEL);
-                agentList[i].updateDirection(pturn);
-                agentList[i].updateOrientation(prot);
+            for (i = 0; i < NUM_NODES; i++) {
+                agentList[i].updatePosition();
+                agentList[i].updateDirection();
+                agentList[i].updateOrientation();
                 agentList[i].initializeConnected();
                 if(agentList[i].state=='R' && agentList[i].currentStateDuration > TR)
-                    y=agentList[i].updateState('S', currentTime, y);
+                    y = agentList[i].updateState('S', currentTime, y);
             }
-            for (i=0; infectedList[i].currentStateDuration>TI; i++) {
+            for (i = 0; infectedList[i].currentStateDuration>TI; i++) {
                 y=infectedList[i].updateState('R', currentTime, y);
             }
             shift=i;

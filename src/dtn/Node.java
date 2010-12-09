@@ -10,37 +10,52 @@ import org.apache.commons.math.distribution.*;
  */
 public class Node {
 
+    static double pRot;
+    static double pTurn;
+    static double velocity = 0.1;
+    static double tauI = 10;
+    static double tauR = 20;
+
     char state;
     int timeFirstInfected;
     int currentStateDuration;
-    int numberConnected;
-    boolean hasBeenInfected;
-    double initDist;
-    double posX, posY;
-    double currentDirection;
-    double currentOrientation;
-    Node connectedNodes[];
 
-    public Node(double L) {
-        state='I';
-        posX=Math.random()*L;
-        posY=Math.random()*L;
-        currentDirection=Math.random()*180;
-        currentOrientation=Math.random()*180;
-        hasBeenInfected=true;
-        currentStateDuration=0;
+    boolean hasBeenInfected;
+    
+    double posX, posY;
+    double initDist;
+
+    /* Direction Parameters */
+    int currentDirection;
+    int currentOrientation;
+
+    /*
+    Node connectedNodes[];
+    int numberConnected;
+    */
+
+    public Node ( double L ) {
+        state = 'I';
+        posX = Math.random()*L;
+        posY = Math.random()*L;
+        currentDirection = (int) Math.random()*180;
+        currentOrientation = (int) Math.random()*180;
+        hasBeenInfected = true;
+        currentStateDuration = 0;
 
     }
 
-    public Node(Node reference, double L) {
-        state='S';
-        posX=Math.random()*L;
-        posY=Math.random()*L;
-        currentDirection=Math.random()*Math.PI;
-        currentOrientation=Math.random()*Math.PI;
-        initDist=Math.sqrt(Math.pow(posX-reference.posX, 2) + Math.pow(posY-reference.posY, 2));
-        hasBeenInfected=false;
-        currentStateDuration=0;
+    public Node ( Node reference, double L ) {
+        state = 'S';
+        posX = Math.random()*L;
+        posY = Math.random()*L;
+        currentDirection = (int) Math.random() * 180;
+        currentOrientation = (int) Math.random()* 180;
+
+        initDist = Math.sqrt(Math.pow(posX-reference.posX, 2) + Math.pow(posY-reference.posY, 2));
+
+        hasBeenInfected = false;
+        currentStateDuration = 0;
 
     }
 
@@ -48,20 +63,20 @@ public class Node {
 
     }
 
-    public void updatePosition(double vel) {
-        posX=posX+vel*Math.cos(currentDirection);
-        posY=posY+vel*Math.sin(currentDirection);
+    public void updatePosition() {
+        posX = posX + velocity * Math.cos(currentDirection);
+        posY = posY + velocity * Math.sin(currentDirection);
     }
 
-    public void updateDirection(double pturn) {
+    public void updateDirection () {
         //update direction using poisson generator
     }
 
-    public void updateOrientation(double prot) {
+    public void updateOrientation() {
         //update orientation using poisson generator
     }
 
-    public int updateState(char newState, int time, int y) {
+    public int updateState ( char newState, int time, int y ) {
 
         if(state==newState)
             currentStateDuration++;
