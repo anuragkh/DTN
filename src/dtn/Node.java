@@ -20,6 +20,8 @@ public class Node {
     char state;
     int timeFirstInfected;
     int currentStateDuration;
+    int regionIndexX;
+    int regionIndexY;
 
     boolean hasBeenInfected;
     

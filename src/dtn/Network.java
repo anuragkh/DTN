@@ -42,7 +42,6 @@ public class Network {
     public void broadcast(double pturn, double prot) throws MathException {
 
         int i;
-        int shift=0;
         int y = 1;
         while(y < NUM_NODES) {
             currentTime++;
