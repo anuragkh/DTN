@@ -5,8 +5,7 @@
 
 package dtn;
 
-import java.util.ArrayList;
-import java.util.Queue;
+import org.apache.commons.math.MathException;
 
 /**
  *
@@ -19,7 +18,7 @@ public class Network {
 
     final double GS_0=0.0316;
     Node[] agentList;
-    Queue<Node> infectedList;
+    InfectedQueue infectedList;
     
     int currentTime;
 
@@ -32,13 +31,15 @@ public class Network {
             agentList[i] = new Node(agentList[0], L);
         }
         for (int i=0; i<agentList.length; i++) {
-            agentList[i].initializeConnected();
+            //agentList[i].initializeConnected();
         }
+
+        infectedList = new InfectedQueue(NUM_NODES);
         infectedList.add(agentList[0]);
 
     }
 
-    public void broadcast(double pturn, double prot) {
+    public void broadcast(double pturn, double prot) throws MathException {
 
         int i;
         int shift=0;
@@ -49,46 +50,20 @@ public class Network {
                 agentList[i].updatePosition();
                 agentList[i].updateDirection();
                 agentList[i].updateOrientation();
-                agentList[i].initializeConnected();
-                if(agentList[i].state=='R' && agentList[i].currentStateDuration > TR)
+                //agentList[i].initializeConnected();
+                if(agentList[i].state=='R' && agentList[i].currentStateDuration > Node.tauR)
                     y = agentList[i].updateState('S', currentTime, y);
             }
-            for (i = 0; infectedList[i].currentStateDuration>TI; i++) {
-                y=infectedList[i].updateState('R', currentTime, y);
+            
+            for (i = infectedList.front; infectedList.get(i).currentStateDuration>Node.tauI; i++) 
+                y= infectedList.remove().updateState('R', currentTime, y);
+
+            for (i=infectedList.front; i<=infectedList.rear; i++) {
+                //Update from S to I
             }
-            shift=i;
-            for (i=shift; i<currentInfected; i++)
-                infectedList[i-shift]=infectedList[i];
-            currentInfected-=shift;
-            numberInfected=currentInfected;
-            for (i=0; i<currentInfected; i++) {
-                for (int j=0; j<infectedList[i].numberConnected; j++) {
-                    if(infectedList[i].connectedNodes[j].state == 'S') {
-                        y=infectedList[i].connectedNodes[j].updateState('I', currentTime, y);
-                        infectedList[numberInfected++]=infectedList[i].connectedNodes[j];
-                    }
-                }
-            }
-            currentInfected=numberInfected;
+            
         }
 
     }
-    
-    public void averageRoutingTime() {
-       
-        initialDistance=new double[N];
-        routingTime=new int[N];
-        for (int i=0; i<N; i++) {
-            initialDistance[i]=agentList[i].initDist;
-            routingTime[i]=agentList[i].timeFirstInfected;
-        }
-        
-        
-    }
-
-
-
-
-
 
 }

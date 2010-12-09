@@ -3,6 +3,7 @@
  * and open the template in the editor.
  */
 package dtn;
+import org.apache.commons.math.MathException;
 import org.apache.commons.math.distribution.*;
 /**
  *
@@ -13,8 +14,8 @@ public class Node {
     static double pRot;
     static double pTurn;
     static double velocity = 0.1;
-    static double tauI = 10;
-    static double tauR = 20;
+    static double tauI = 500;
+    static double tauR = 50;
 
     char state;
     int timeFirstInfected;
@@ -29,12 +30,11 @@ public class Node {
     int currentDirection;
     int currentOrientation;
 
-    /*
-    Node connectedNodes[];
-    int numberConnected;
-    */
+    //poisson distribution function
+    PoissonDistributionImpl obj= new PoissonDistributionImpl(180);
 
     public Node ( double L ) {
+
         state = 'I';
         posX = Math.random()*L;
         posY = Math.random()*L;
@@ -46,6 +46,7 @@ public class Node {
     }
 
     public Node ( Node reference, double L ) {
+
         state = 'S';
         posX = Math.random()*L;
         posY = Math.random()*L;
@@ -59,21 +60,26 @@ public class Node {
 
     }
 
-    public void initializeConnected() {
-
-    }
-
     public void updatePosition() {
-        posX = posX + velocity * Math.cos(currentDirection);
-        posY = posY + velocity * Math.sin(currentDirection);
+
+        posX = posX + velocity * Math.cos(Math.PI*currentDirection/180);
+        posY = posY + velocity * Math.sin(Math.PI*currentDirection/180);
     }
 
-    public void updateDirection () {
-        //update direction using poisson generator
+    public void updateDirection () throws MathException {
+
+        if(Math.random()< pTurn) {
+
+            currentDirection = obj.inverseCumulativeProbability(pTurn);
+        }
     }
 
-    public void updateOrientation() {
-        //update orientation using poisson generator
+    public void updateOrientation() throws MathException {
+
+       if(Math.random()< pRot) {
+
+            currentDirection = obj.inverseCumulativeProbability(pRot);
+        }
     }
 
     public int updateState ( char newState, int time, int y ) {
