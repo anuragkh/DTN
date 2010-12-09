@@ -31,7 +31,7 @@ public class Network {
             agentList[i] = new Node(agentList[0], L);
         }
         for (int i=0; i<agentList.length; i++) {
-            agentList[i].initializeConnected();
+            //agentList[i].initializeConnected();
         }
 
         infectedList = new InfectedQueue(NUM_NODES);
@@ -55,10 +55,8 @@ public class Network {
                     y = agentList[i].updateState('S', currentTime, y);
             }
             
-            for (i = infectedList.front; infectedList.get(i).currentStateDuration>Node.tauI; i++) {
-                y=infectedList.get(i).updateState('R', currentTime, y);
-                infectedList.remove();
-            }
+            for (i = infectedList.front; infectedList.get(i).currentStateDuration>Node.tauI; i++) 
+                y= infectedList.remove().updateState('R', currentTime, y);
 
             for (i=infectedList.front; i<=infectedList.rear; i++) {
                 //Update from S to I
