@@ -16,15 +16,15 @@ public class InfectedQueue{
     private Node queue[];
 
     public InfectedQueue(int maxElements) {
-        queue=new Node[maxElements];
-        front=0;
-        rear=0;
+        queue = new Node[maxElements];
+        front = 0;
+        rear = 0;
     }
 
     public void add(Node n) {
-        int temp=rear;
-        rear= (rear +1) % queue.length;
-        if( front == rear )
+        int temp = rear;
+        rear = (rear +1) % queue.length;
+        if(front == temp)
             rear = temp;
         queue[rear] = n;
     }
@@ -34,7 +34,7 @@ public class InfectedQueue{
     }
 
     public boolean isEmpty() {
-        return front==rear;
+        return front == rear;
     }
 
     public boolean isFull() {
@@ -42,9 +42,9 @@ public class InfectedQueue{
     }
 
     public Node remove() {
-        if(front==rear);
-            //ERROR!!
+
+        int temp=front;
         front = (front + 1) % queue.length;
-        return queue[front];
+        return queue[temp];
     }
 }

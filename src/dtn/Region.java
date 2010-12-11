@@ -21,15 +21,17 @@ public class Region {
 
     }
     
-    void addAgent(Node agent) {
-       
-        occupants.add(agent); 
+    boolean addAgent(Node agent) {
+
+        boolean add = occupants.add(agent);
+        return add;
         
     }
     
-    void removeAgent(Node agent) {
+    boolean removeAgent(Node agent) {
         
-        occupants.remove(agent);
+        boolean remove = occupants.remove(agent);
+        return remove;
         
     }
 
