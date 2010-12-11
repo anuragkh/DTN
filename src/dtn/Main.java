@@ -7,7 +7,7 @@ package dtn;
 
 /**
  *
- * @author Ayush and Anurag
+ * @author Renegade
  */
 public class Main {
 

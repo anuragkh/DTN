@@ -9,7 +9,7 @@ import org.apache.commons.math.distribution.*;
 
 /**
  *
- * @author Ayush and Anurag
+ * @author Renegade
  */
 public class Node {
 
@@ -18,14 +18,18 @@ public class Node {
     static double velocity = 0.1;
     static double tauI = 500;
     static double tauR = 50;
+
     char state;
+    int nodeIndex;
     int timeFirstInfected;
     int currentStateDuration;
     int regionIndexX;
     int regionIndexY;
+    //int newNeighbors;
     boolean hasBeenInfected;
     double posX, posY;
     double initDist;
+    boolean isDiscovered[];
 
     /* Direction Parameters */
     int currentDirection;
@@ -33,8 +37,9 @@ public class Node {
     //poisson distribution function
     PoissonDistributionImpl obj = new PoissonDistributionImpl(180);
 
-    public Node(double L) {
+    public Node(double L, int index) {
 
+        nodeIndex=index;
         state = 'I';
         posX = Math.random() * L;
         posY = Math.random() * L;
@@ -42,11 +47,16 @@ public class Node {
         currentOrientation = (int) Math.random() * 180;
         hasBeenInfected = true;
         currentStateDuration = 0;
+        isDiscovered=new boolean[Network.NUM_NODES];
+        for (boolean n: isDiscovered)
+            n=false;
+        //newNeighbors=0;
 
     }
 
-    public Node(Node reference, double L) {
+    public Node(Node reference, double L, int index) {
 
+        nodeIndex=index;
         state = 'S';
         posX = Math.random() * L;
         posY = Math.random() * L;
@@ -57,6 +67,10 @@ public class Node {
 
         hasBeenInfected = false;
         currentStateDuration = 0;
+        isDiscovered=new boolean[Network.NUM_NODES];
+        for (boolean n: isDiscovered)
+            n=false;
+        //newNeighbors=0;
 
     }
 
