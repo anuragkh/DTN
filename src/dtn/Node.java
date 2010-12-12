@@ -16,65 +16,75 @@ public class Node {
     static double pRot;
     static double pTurn;
     static double velocity = 0.1;
-    static double tauI = 500;
-    static double tauR = 50;
+    static double tauI = 50;
+    static double tauR = 5;
 
-    char state;
+    
     int nodeIndex;
+
+    /* Time parameters */
     int timeFirstInfected;
     int currentStateDuration;
-    int regionIndexX;
-    int regionIndexY;
-    //int newNeighbors;
-    boolean hasBeenInfected;
-    double posX, posY;
+
+    /* Distance Parameters */
+    public double posX, posY;
     double initDist;
-    boolean isDiscovered[];
 
     /* Direction Parameters */
     int currentDirection;
     int currentOrientation;
-    //poisson distribution function
+    
+    /* Stores the state of the Node */
+    public char state;
+
+    /* Stores the region to which the node belongs */
+    int regionIndexX;
+    int regionIndexY;
+
+    boolean hasBeenInfected;
+    boolean isDiscovered[];
+
+    /* Poisson distribution function */
     PoissonDistributionImpl obj = new PoissonDistributionImpl(90);
 
     public Node(double L, int index, double pturn, double prot) {
 
-        nodeIndex=index;
-        pTurn=pturn;
-        pRot=prot;
+        nodeIndex = index;
+        pTurn = pturn;
+        pRot = prot;
         state = 'I';
         posX = Math.random() * L;
         posY = Math.random() * L;
-        currentDirection = (int)(Math.random() * 180);
-        currentOrientation = (int)(Math.random() * 180);
+        currentDirection = (int) (Math.random() * 360);
+        currentOrientation = (int) (Math.random() * 360);
         hasBeenInfected = true;
         currentStateDuration = 0;
-        isDiscovered=new boolean[Network.NUM_NODES];
-        for (boolean n: isDiscovered)
-            n=false;
-        //newNeighbors=0;
+        isDiscovered = new boolean[Network.NUM_NODES];
+        for (boolean n : isDiscovered) {
+            n = false;
+        }
 
     }
 
     public Node(Node reference, double L, int index, double pturn, double prot) {
 
-        nodeIndex=index;
-        pTurn=pturn;
-        pRot=prot;
+        nodeIndex = index;
+        pTurn = pturn;
+        pRot = prot;
         state = 'S';
         posX = Math.random() * L;
         posY = Math.random() * L;
-        currentDirection = (int)(Math.random() * 180);
-        currentOrientation = (int)(Math.random() * 180);
+        currentDirection = (int) (Math.random() * 360);
+        currentOrientation = (int) (Math.random() * 360);
 
         initDist = Math.sqrt(Math.pow(posX - reference.posX, 2) + Math.pow(posY - reference.posY, 2));
 
         hasBeenInfected = false;
         currentStateDuration = 0;
-        isDiscovered=new boolean[Network.NUM_NODES];
-        for (boolean n: isDiscovered)
-            n=false;
-        //newNeighbors=0;
+        isDiscovered = new boolean[Network.NUM_NODES];
+        for (boolean n : isDiscovered) {
+            n = false;
+        }
 
     }
 
@@ -100,7 +110,8 @@ public class Node {
 
         if (Math.random() < pTurn) {
 
-            currentDirection = obj.inverseCumulativeProbability(pTurn);
+            currentDirection += obj.inverseCumulativeProbability(Math.random());
+
         }
     }
 
@@ -108,16 +119,14 @@ public class Node {
 
         if (Math.random() < pRot) {
 
-            currentDirection = obj.inverseCumulativeProbability(pRot);
+            currentDirection += obj.inverseCumulativeProbability(Math.random());
         }
     }
 
     public int updateState(char newState, int time, int y) {
 
-        if (state != newState) {
-            currentStateDuration = 0;
+        if (state != newState) 
             state = newState;
-        }
 
         if (!hasBeenInfected && state == 'I') {
             hasBeenInfected = true;
@@ -133,5 +142,4 @@ public class Node {
         currentStateDuration++;
 
     }
-
 }
