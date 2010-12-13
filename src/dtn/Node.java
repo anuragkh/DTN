@@ -16,19 +16,23 @@ public class Node {
     static double pRot;
     static double pTurn;
     static double velocity = 0.1;
-    static double tauI = 50;
-    static double tauR = 5;
+    static double tauI = 500;
+    static double tauR = 50;
+    
+    /* Directioanal parameters */
+    double GAMMA_T;
+    double GAMMA_R;
 
     
     int nodeIndex;
 
     /* Time parameters */
-    int timeFirstInfected;
+    public int timeFirstInfected;
     int currentStateDuration;
 
     /* Distance Parameters */
     public double posX, posY;
-    double initDist;
+    public double initDist;
 
     /* Direction Parameters */
     int currentDirection;
@@ -57,8 +61,8 @@ public class Node {
         posY = Math.random() * L;
         currentDirection = (int) (Math.random() * 360);
         currentOrientation = (int) (Math.random() * 360);
-        hasBeenInfected = true;
         currentStateDuration = 0;
+        hasBeenInfected = true;
         isDiscovered = new boolean[Network.NUM_NODES];
         for (boolean n : isDiscovered) {
             n = false;
@@ -76,11 +80,9 @@ public class Node {
         posY = Math.random() * L;
         currentDirection = (int) (Math.random() * 360);
         currentOrientation = (int) (Math.random() * 360);
-
         initDist = Math.sqrt(Math.pow(posX - reference.posX, 2) + Math.pow(posY - reference.posY, 2));
-
-        hasBeenInfected = false;
         currentStateDuration = 0;
+        hasBeenInfected = false;
         isDiscovered = new boolean[Network.NUM_NODES];
         for (boolean n : isDiscovered) {
             n = false;
@@ -88,6 +90,12 @@ public class Node {
 
     }
 
+    public void setGamma(int gammaT, int gammaR) {
+
+        GAMMA_T=gammaT;
+        GAMMA_R=gammaR;
+
+    }
     public void updatePosition() {
 
         double tempX, tempY;
@@ -119,7 +127,7 @@ public class Node {
 
         if (Math.random() < pRot) {
 
-            currentDirection += obj.inverseCumulativeProbability(Math.random());
+            currentOrientation += obj.inverseCumulativeProbability(Math.random());
         }
     }
 

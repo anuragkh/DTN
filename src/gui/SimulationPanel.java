@@ -14,7 +14,6 @@ package gui;
 import dtn.Network;
 import dtn.Node;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 
 /**
@@ -57,11 +56,11 @@ public class SimulationPanel extends javax.swing.JPanel {
             for (Node n : network.agentList) {
 
                 switch (n.state) {
-                    case 'S': g.setColor(Color.black); break;
+                    case 'S': g.setColor(Color.green); break;
                     case 'I': g.setColor(Color.red); break;
                     case 'R': g.setColor(Color.blue); break;
                 }
-                g.fillOval((int) (5*n.posX), (int) (5*n.posY), 3, 3);
+                g.fillOval((int) (3*n.posX), (int) (3*n.posY), 3, 3);
             }
         }
     }

@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package dtn;
 
 /**
@@ -11,12 +10,10 @@ package dtn;
  */
 public class Link {
 
-    static final double DELTA=0.05;
-    static final double K=1;
-    static final double Pt=1;
-    static final double GS_0=0.0316;
-    static final double GAMMA_T=60;
-    static final double GAMMA_R=60;
+    static final double DELTA = 0.045;
+    static final double K = 1;
+    static final double Pt = 1;
+    static final double GS_0 = 0.0316;
 
     public static double xij(Node i, Node j) {
 
@@ -32,7 +29,7 @@ public class Link {
 
     public static double gain(Node i, Node j, double gamma) {
 
-        if(Math.cos(Math.PI * j.currentDirection / 180) * (i.posX - j.posX) + Math.sin(Math.PI * j.currentDirection / 180) * (i.posY - j.posY) < Math.cos(gamma / 2))
+        if (Math.cos(Math.PI * j.currentOrientation / 180) * (i.posX - j.posX) + Math.sin(Math.PI * j.currentOrientation / 180) * (i.posY - j.posY) < Math.cos(gamma / 2))
             return gainM_0(gamma);
         else
             return GS_0;
@@ -41,16 +38,15 @@ public class Link {
 
     public static double power(Node i, Node j) {
 
-        return K * Pt * gain(i, j, GAMMA_T) * gain(j, i, GAMMA_R) / Math.pow(xij(i, j), 2);
+        return K * Pt * gain(i, j, i.GAMMA_T) * gain(j, i, j.GAMMA_R) / Math.pow(xij(i, j), 2);
 
     }
 
     public static boolean isConnected(Node i, Node j) {
 
-        if( power(i, j) > DELTA)
+        if (power(i, j) > DELTA)
             return true;
-
         return false;
-    }
 
+    }
 }
