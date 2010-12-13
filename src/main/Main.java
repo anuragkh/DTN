@@ -5,6 +5,7 @@
 package main;
 
 import dtn.Network;
+import gui.GraphingData;
 import org.apache.commons.math.MathException;
 import gui.SimulationGUI;
 import javax.swing.JFrame;
@@ -21,6 +22,7 @@ public class Main {
     public static void main(String[] args) throws MathException, InterruptedException {
 
         final SimulationGUI sim = new SimulationGUI();
+        final GraphingData gd = new GraphingData();
         Network n = new Network(0.1, 0.1, sim);
         sim.setNetwork(n);
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -30,6 +32,16 @@ public class Main {
             }
         });
         n.broadcast();
-        
+        gd.setNetwork(n);
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                JFrame f = new JFrame();
+                f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                f.add(gd);
+                f.setSize(600, 600);
+                f.setLocation(200, 200);
+                f.setVisible(true);
+            }
+        });
     }
 }

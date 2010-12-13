@@ -23,12 +23,12 @@ public class Node {
     int nodeIndex;
 
     /* Time parameters */
-    int timeFirstInfected;
+    public int timeFirstInfected;
     int currentStateDuration;
 
     /* Distance Parameters */
     public double posX, posY;
-    double initDist;
+    public double initDist;
 
     /* Direction Parameters */
     int currentDirection;
