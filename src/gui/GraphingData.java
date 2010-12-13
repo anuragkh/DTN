@@ -22,6 +22,7 @@ public class GraphingData extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
+        setBackground(new java.awt.Color(255, 255, 255));
         setRoutingTime();
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
@@ -65,8 +66,8 @@ public class GraphingData extends JPanel {
         g2.setPaint(Color.red);
         for (int i = 0; i < routingTime.length; i++) {
             double x = PAD + network.agentList[i].initDist * xInc * 6;
-            double y = h - PAD - scale * network.agentList[i].timeFirstInfected;
-            g2.fill(new Ellipse2D.Double(x - 2, y - 2, 4, 4));
+            double y = h - PAD - scale * routingTime[i];
+            g2.fill(new Ellipse2D.Double(x - 1, y - 1, 2, 2));
         }
     }
 

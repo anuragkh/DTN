@@ -60,7 +60,7 @@ public class SimulationPanel extends javax.swing.JPanel {
                     case 'I': g.setColor(Color.red); break;
                     case 'R': g.setColor(Color.blue); break;
                 }
-                g.fillOval((int) (5*n.posX), (int) (5*n.posY), 3, 3);
+                g.fillOval((int) (3*n.posX), (int) (3*n.posY), 3, 3);
             }
         }
     }
