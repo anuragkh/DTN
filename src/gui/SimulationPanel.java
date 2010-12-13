@@ -8,7 +8,6 @@
  *
  * Created on Dec 12, 2010, 11:24:54 PM
  */
-
 package gui;
 
 import dtn.Network;
@@ -50,26 +49,31 @@ public class SimulationPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-     public void paint(Graphics g) {
+    public void paint(Graphics g) {
         // Dynamically calculate size information
         if (network != null) {
             for (Node n : network.agentList) {
 
                 switch (n.state) {
-                    case 'S': g.setColor(Color.green); break;
-                    case 'I': g.setColor(Color.red); break;
-                    case 'R': g.setColor(Color.blue); break;
+                    case 'S':
+                        g.setColor(Color.green);
+                        break;
+                    case 'I':
+                        g.setColor(Color.red);
+                        break;
+                    case 'R':
+                        g.setColor(Color.blue);
+                        break;
                 }
-                g.fillOval((int) (3*n.posX), (int) (3*n.posY), 3, 3);
+                g.fillOval((int) (3 * n.posX), (int) (3 * n.posY), 3, 3);
             }
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
 
-     public void setNetwork ( Network network ) {
-         this.network = network;
-     }
-
-     private Network network;
+    public void setNetwork(Network network) {
+        this.network = network;
+    }
+    private Network network;
 }

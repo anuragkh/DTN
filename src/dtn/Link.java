@@ -29,10 +29,10 @@ public class Link {
 
     public static double gain(Node i, Node j, double gamma) {
 
-        if (Math.cos(Math.PI * j.currentOrientation / 180) * (i.posX - j.posX) + Math.sin(Math.PI * j.currentOrientation / 180) * (i.posY - j.posY) < Math.cos(gamma / 2))
+        if (Math.cos(Math.PI * j.currentOrientation / 180) * (i.posX - j.posX) + Math.sin(Math.PI * j.currentOrientation / 180) * (i.posY - j.posY) < Math.cos(gamma / 2)) {
             return gainM_0(gamma);
-        else
-            return GS_0;
+        }
+        return GS_0;
 
     }
 
@@ -44,8 +44,9 @@ public class Link {
 
     public static boolean isConnected(Node i, Node j) {
 
-        if (power(i, j) > DELTA)
+        if (power(i, j) > DELTA) {
             return true;
+        }
         return false;
 
     }

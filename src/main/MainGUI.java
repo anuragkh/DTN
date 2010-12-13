@@ -23,9 +23,10 @@ public class MainGUI {
 
         final SimulationGUI sim = new SimulationGUI();
         final GraphingData gd = new GraphingData();
-        Network n = new Network(0.1, 0.0001, 1, sim);
+        Network n = new Network(0.0, 0.0001, 1, sim);
         sim.setNetwork(n);
         java.awt.EventQueue.invokeLater(new Runnable() {
+
             public void run() {
                 sim.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 sim.setVisible(true);
@@ -34,6 +35,7 @@ public class MainGUI {
         n.broadcast();
         gd.setNetwork(n);
         java.awt.EventQueue.invokeLater(new Runnable() {
+
             public void run() {
                 JFrame f = new JFrame();
                 f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
