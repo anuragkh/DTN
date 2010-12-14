@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package main;
 
 import dtn.Network;
@@ -16,8 +15,8 @@ import results.RoutingTime;
  */
 public class Main {
 
-    public static void main(String[] args) throws MathException, InterruptedException, IOException{
-        Network network = new Network(0, 0.0001, 0.1);
+    public static void main(String[] args) throws MathException, InterruptedException, IOException {
+        Network network = new Network(1, 0.0001, 0.1);
         network.broadcast();
         RoutingTime data = new RoutingTime(network);
         data.writeToFile();

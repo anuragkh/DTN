@@ -44,20 +44,20 @@ public class GraphingData extends JPanel {
 
         /* Ordinate label */
         String s = "Routing Time";
-        float sy = PAD + ((h - 2*PAD) - s.length()*sh)/2 + lm.getAscent();
-        for(int i = 0; i < s.length(); i++) {
+        float sy = PAD + ((h - 2 * PAD) - s.length() * sh) / 2 + lm.getAscent();
+        for (int i = 0; i < s.length(); i++) {
             String letter = String.valueOf(s.charAt(i));
-            float sw = (float)font.getStringBounds(letter, frc).getWidth();
-            float sx = (PAD - sw)/2;
+            float sw = (float) font.getStringBounds(letter, frc).getWidth();
+            float sx = (PAD - sw) / 2;
             g2.drawString(letter, sx, sy);
             sy += sh;
         }
 
         /* Abcissa label */
         s = "Initial Distance";
-        sy = h - PAD + (PAD - sh)/2 + lm.getAscent();
-        float sw = (float)font.getStringBounds(s, frc).getWidth();
-        float sx = (w - sw)/2;
+        sy = h - PAD + (PAD - sh) / 2 + lm.getAscent();
+        float sw = (float) font.getStringBounds(s, frc).getWidth();
+        float sx = (w - sw) / 2;
         g2.drawString(s, sx, sy);
         double xInc = (double) (w - 2 * PAD) / (routingTime.length - 1);
         double scale = (double) (h - 2 * PAD) / getMax();
@@ -71,9 +71,9 @@ public class GraphingData extends JPanel {
         }
     }
 
-    private void setRoutingTime(){
+    private void setRoutingTime() {
         routingTime = new int[network.agentList.length];
-        for(int i=0; i< routingTime.length; i++){
+        for (int i = 0; i < routingTime.length; i++) {
             routingTime[i] = network.agentList[i].timeFirstInfected;
         }
     }
@@ -91,5 +91,4 @@ public class GraphingData extends JPanel {
     public void setNetwork(Network network) {
         this.network = network;
     }
-
 }

@@ -17,7 +17,6 @@ public class RoutingTime {
     double[] initDistance;
     Network network;
 
-
     public RoutingTime(Network network) {
 
         this.network = network;
@@ -67,13 +66,13 @@ public class RoutingTime {
     public void writeToFile() throws IOException {
 
         /* Sorting both arrays according to initDistance */
-        quickSort(initDistance, routingTime, 0, initDistance.length-1);
+        quickSort(initDistance, routingTime, 0, initDistance.length - 1);
 
         /* Writing Data to file*/
 
         Writer output = new BufferedWriter(new FileWriter("RoutingTimeVsInitialDistance.txt"));
         String str;
-        for(int i = 0; i < initDistance.length; i++) {
+        for (int i = 0; i < initDistance.length; i++) {
             str = Double.toString(initDistance[i]) + "\t" + Integer.toString(routingTime[i]) + "\n";
             System.out.print(str);
             output.append(str);

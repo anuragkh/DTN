@@ -18,12 +18,9 @@ public class Node {
     static double velocity = 0.1;
     static double tauI = 500;
     static double tauR = 50;
-    
     /* Directioanal parameters */
     double GAMMA_T;
     double GAMMA_R;
-
-    
     int nodeIndex;
 
     /* Time parameters */
@@ -37,16 +34,15 @@ public class Node {
     /* Direction Parameters */
     int currentDirection;
     int currentOrientation;
-    
     /* Stores the state of the Node */
     public char state;
 
     /* Stores the region to which the node belongs */
     int regionIndexX;
     int regionIndexY;
-
     boolean hasBeenInfected;
-    boolean isDiscovered[];
+    public boolean[] wasNeighbor;
+    public boolean isNeighbor[];
 
     /* Poisson distribution function */
     PoissonDistributionImpl obj = new PoissonDistributionImpl(90);
@@ -63,8 +59,8 @@ public class Node {
         currentOrientation = (int) (Math.random() * 360);
         currentStateDuration = 0;
         hasBeenInfected = true;
-        isDiscovered = new boolean[Network.NUM_NODES];
-        for (boolean n : isDiscovered) {
+        isNeighbor = new boolean[Network.NUM_NODES];
+        for (boolean n : isNeighbor) {
             n = false;
         }
 
@@ -83,8 +79,8 @@ public class Node {
         initDist = Math.sqrt(Math.pow(posX - reference.posX, 2) + Math.pow(posY - reference.posY, 2));
         currentStateDuration = 0;
         hasBeenInfected = false;
-        isDiscovered = new boolean[Network.NUM_NODES];
-        for (boolean n : isDiscovered) {
+        isNeighbor = new boolean[Network.NUM_NODES];
+        for (boolean n : isNeighbor) {
             n = false;
         }
 
@@ -92,10 +88,11 @@ public class Node {
 
     public void setGamma(int gammaT, int gammaR) {
 
-        GAMMA_T=gammaT;
-        GAMMA_R=gammaR;
+        GAMMA_T = gammaT;
+        GAMMA_R = gammaR;
 
     }
+
     public void updatePosition() {
 
         double tempX, tempY;
@@ -133,8 +130,9 @@ public class Node {
 
     public int updateState(char newState, int time, int y) {
 
-        if (state != newState) 
+        if (state != newState) {
             state = newState;
+        }
 
         if (!hasBeenInfected && state == 'I') {
             hasBeenInfected = true;

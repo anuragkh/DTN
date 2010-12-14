@@ -1,9 +1,7 @@
-
 package gui;
 
 import dtn.Network;
 import java.awt.Graphics2D;
-
 
 public class SimulationGUI extends javax.swing.JFrame {
 
@@ -29,48 +27,40 @@ public class SimulationGUI extends javax.swing.JFrame {
         javax.swing.GroupLayout SimulationPanelLayout = new javax.swing.GroupLayout(simulationPanel);
         simulationPanel.setLayout(SimulationPanelLayout);
         SimulationPanelLayout.setHorizontalGroup(
-            SimulationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 450, Short.MAX_VALUE)
-        );
+                SimulationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 450, Short.MAX_VALUE));
         SimulationPanelLayout.setVerticalGroup(
-            SimulationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 450, Short.MAX_VALUE)
-        );
+                SimulationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 450, Short.MAX_VALUE));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(simulationPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(simulationPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(simulationPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(simulationPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
 
         pack();
     }
 
     /**
-    * @param args the command line arguments
-    */
+     * @param args the command line arguments
+     */
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
+
             public void run() {
                 new SimulationGUI().setVisible(true);
             }
         });
     }
 
-    public void paint ( Graphics2D g ) {
+    public void paint(Graphics2D g) {
         simulationPanel.repaint();
         simulationPanel.revalidate();
     }
 
-    public void setNetwork (Network n) {
+    public void setNetwork(Network n) {
         simulationPanel.setNetwork(n);
     }
-
     // Variables declaration - do not modify
     public SimulationPanel simulationPanel;
     // End of variables declaration
