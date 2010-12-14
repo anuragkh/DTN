@@ -90,12 +90,12 @@ public class RoutingTime {
 
         /* Writing Data to file*/
 
-        Writer output = new BufferedWriter(new FileWriter("RoutingTimeVsInitialDistance.txt"));
+        BufferedWriter output = new BufferedWriter(new FileWriter("RoutingTimeVsInitialDistance.txt"));
         String str;
         for (int i = 0; i < initDistance.length; i++) {
             str = Double.toString(initDistance[i]) + "\t" + Integer.toString(routingTime[i]) + "\n";
             System.out.print(str);
-            output.write(str);
+            output.write(initDistance[i] + "\t" + routingTime[i] + "\n");
         }
         output.close();
     }
