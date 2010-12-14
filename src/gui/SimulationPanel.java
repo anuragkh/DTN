@@ -66,6 +66,11 @@ public class SimulationPanel extends javax.swing.JPanel {
                         break;
                 }
                 g.fillOval((int) (3 * n.posX), (int) (3 * n.posY), 3, 3);
+                for (int i = 0; i < n.isNeighbor.length; i++) {
+                    if (n.isNeighbor[i] && !n.wasNeighbor[i]) {
+                        g.drawLine((int) (3 * n.posX) + 1, (int) (3 * n.posY) + 1, (int) (3 * network.agentList[i].posX) + 1, (int) (3 * network.agentList[i].posY) + 1);
+                    }
+                }
             }
         }
     }

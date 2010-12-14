@@ -128,6 +128,9 @@ public class Network {
         double newNeighbors;
 
         while (y < NUM_NODES) {
+
+            
+            
             newNeighbors = 0;
             currentTime++;
 
@@ -185,10 +188,10 @@ public class Network {
                 int regX = n.regionIndexX, regY = n.regionIndexY;
                 int regMax = L / GRID_SIZE - 1;
 
-                boolean[] wasNeighbor;
-                wasNeighbor = n.isNeighbor;
+                
+                n.wasNeighbor = n.isNeighbor;
 
-                n.isNeighbor = new boolean[wasNeighbor.length];
+                n.isNeighbor = new boolean[n.wasNeighbor.length];
                 for (i = 0; i < n.isNeighbor.length; i++) {
                     n.isNeighbor[i] = false;
                 }
@@ -203,7 +206,7 @@ public class Network {
                                     temp.add(adj);
                                 }
                                 n.isNeighbor[adj.nodeIndex] = true;
-                                if (!wasNeighbor[adj.nodeIndex]) {
+                                if (!n.wasNeighbor[adj.nodeIndex]) {
                                     newNeighbors++;
                                 }
                             }

@@ -41,7 +41,8 @@ public class Node {
     int regionIndexX;
     int regionIndexY;
     boolean hasBeenInfected;
-    boolean isNeighbor[];
+    public boolean[] wasNeighbor;
+    public boolean isNeighbor[];
 
     /* Poisson distribution function */
     PoissonDistributionImpl obj = new PoissonDistributionImpl(90);
