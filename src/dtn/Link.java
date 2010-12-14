@@ -10,7 +10,7 @@ package dtn;
  */
 public class Link {
 
-    static final double DELTA = 0.045;
+    static final double DELTA = 1;
     static final double K = 1;
     static final double Pt = 1;
     static final double GS_0 = 0.0316;
@@ -27,18 +27,24 @@ public class Link {
 
     }
 
-    public static double gain(Node i, Node j, double gamma) {
+    public static double gain(Node i, Node j, int gamma) {
 
-        if (Math.cos(Math.PI * j.currentOrientation / 180) * (i.posX - j.posX) + Math.sin(Math.PI * j.currentOrientation / 180) * (i.posY - j.posY) < Math.cos(gamma / 2)) {
-            return gainM_0(gamma);
+        if (gamma < 360) {
+            double thetaX = Math.cos((Math.PI * j.currentOrientation) / 180);
+            double thetaY = Math.sin((Math.PI * j.currentOrientation) / 180);
+            double rX = (j.posX - i.posX)/xij(i,j), rY=(j.posY - i.posY)/xij(i,j);
+            if ((thetaX * rX + thetaY * rY) > Math.cos(Math.PI * gamma / 360)) {
+                return gainM_0(Math.PI * gamma / 180);
+            }
+            return GS_0;
         }
-        return GS_0;
+        return 1;
 
     }
 
     public static double power(Node i, Node j) {
 
-        return K * Pt * gain(i, j, i.GAMMA_T) * gain(j, i, j.GAMMA_R) / Math.pow(xij(i, j), 2);
+        return K * Pt * gain(i, j, i.GAMMA_R) * gain(i, j, j.GAMMA_T) / Math.pow(xij(i, j), 2);
 
     }
 

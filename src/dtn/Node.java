@@ -19,8 +19,8 @@ public class Node {
     static double tauI = 500;
     static double tauR = 50;
     /* Directioanal parameters */
-    double GAMMA_T;
-    double GAMMA_R;
+    public int GAMMA_T;
+    public int GAMMA_R;
     int nodeIndex;
 
     /* Time parameters */
@@ -97,13 +97,13 @@ public class Node {
 
         double tempX, tempY;
 
-        tempX = posX + velocity * Math.cos(Math.PI * currentDirection / 180);
-        tempY = posY + velocity * Math.sin(Math.PI * currentDirection / 180);
+        tempX = posX + velocity * Math.cos((Math.PI * currentDirection) / 180);
+        tempY = posY + velocity * Math.sin((Math.PI * currentDirection) / 180);
 
         if (tempX < 0 || tempY < 0 || tempX >= Network.L || tempY >= Network.L) {
             currentDirection = 180 + currentDirection;
-            posX = posX + velocity * Math.cos(Math.PI * currentDirection / 180);
-            posY = posY + velocity * Math.sin(Math.PI * currentDirection / 180);
+            posX = posX + velocity * Math.cos((Math.PI * currentDirection) / 180);
+            posY = posY + velocity * Math.sin((Math.PI * currentDirection) / 180);
         } else {
             posX = tempX;
             posY = tempY;
