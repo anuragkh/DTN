@@ -16,8 +16,8 @@ public class Network {
 
     public static final int NUM_NODES = 1000;
     final double rho = 0.05;
-    final int GRID_SIZE = 10;
-    static int L;
+    int GRID_SIZE;
+    public static int L;
     public Node[] agentList;
     LinkedList<Node> infectedList;
     Region[][] grid;
@@ -25,12 +25,15 @@ public class Network {
     SimulationGUI sim;
 
     /* Constructor with Simulation */
-    public Network(double fracDA, double pTurn, double pRot, SimulationGUI sim) {
+    public Network(double fracDA, double pTurn, double pRot, SimulationGUI sim, int gamma) {
 
         currentTime = 0;
 
+        GRID_SIZE = (int) Link.gainM_0((Math.PI * gamma) / 180) + 1;
         L = (int) Math.sqrt(NUM_NODES / rho);
-        L = (int) (Math.ceil((double) L / 10) * 10);
+        
+        System.out.println("L :" + L + "  Grid Size: " + GRID_SIZE);
+
 
         /* Initializing agentList */
         agentList = new Node[NUM_NODES];
@@ -39,12 +42,11 @@ public class Network {
             agentList[i] = new Node(agentList[0], L, i, pTurn, pRot);
         }
 
-
         /* Assigning gamma to all nodes */
         int numDA = (int) (fracDA * agentList.length);
         for (Node n : agentList) {
             if (n.nodeIndex < numDA) {
-                n.setGamma(60, 60);
+                n.setGamma(gamma, gamma);
             } else {
                 n.setGamma(360, 360);
             }
@@ -52,8 +54,8 @@ public class Network {
 
         /* Initializing Regions with coordinates */
         grid = new Region[L / GRID_SIZE + 1][L / GRID_SIZE + 1];
-        for (int i = 0; i < L / GRID_SIZE; i++) {
-            for (int j = 0; j < L / GRID_SIZE; j++) {
+        for (int i = 0; i <= L / GRID_SIZE; i++) {
+            for (int j = 0; j <= L / GRID_SIZE; j++) {
                 grid[i][j] = new Region();
             }
         }
@@ -73,12 +75,14 @@ public class Network {
     }
 
     /* Constructor without Simulation */
-    public Network(double fracDA, double pTurn, double pRot) {
+    public Network(double fracDA, double pTurn, double pRot, int gamma) {
 
         currentTime = 0;
 
+        GRID_SIZE = (int) Link.gainM_0(Math.PI * gamma / 180) + 1;
         L = (int) Math.sqrt(NUM_NODES / rho);
-        L = (int) (Math.ceil((double) L / 10) * 10);
+
+        System.out.println("L :" + L + "Grid Size: " + GRID_SIZE);
 
         /* Initializing agentList */
         agentList = new Node[NUM_NODES];
@@ -92,7 +96,7 @@ public class Network {
         int numDA = (int) (fracDA * agentList.length);
         for (Node n : agentList) {
             if (n.nodeIndex < numDA) {
-                n.setGamma(60, 60);
+                n.setGamma(gamma, gamma);
             } else {
                 n.setGamma(360, 360);
             }
@@ -100,8 +104,8 @@ public class Network {
 
         /* Initializing Regions with coordinates */
         grid = new Region[L / GRID_SIZE + 1][L / GRID_SIZE + 1];
-        for (int i = 0; i < L / GRID_SIZE; i++) {
-            for (int j = 0; j < L / GRID_SIZE; j++) {
+        for (int i = 0; i <= L / GRID_SIZE; i++) {
+            for (int j = 0; j <= L / GRID_SIZE; j++) {
                 grid[i][j] = new Region();
             }
         }
@@ -127,7 +131,7 @@ public class Network {
         int y = 1;
         double newNeighbors;
 
-        while (y < NUM_NODES) {
+        while (y < 0.99 * NUM_NODES) {
 
             
             
@@ -140,12 +144,6 @@ public class Network {
                 agentList[i].updatePosition();
                 agentList[i].updateCurrentStateDuration();
 
-                /* Printing
-                 *
-                System.out.println("Node " + i + ": St=" + agentList[i].state + " CSD=" + agentList[i].currentStateDuration);
-                 *
-                 */
-
                 /* Updating region for current node */
                 int regX = (int) (agentList[i].posX / GRID_SIZE), regY = (int) (agentList[i].posY / GRID_SIZE);
                 if (regX != agentList[i].regionIndexX || regY != agentList[i].regionIndexY) {
@@ -155,7 +153,7 @@ public class Network {
                     agentList[i].regionIndexY = regY;
                 }
 
-                /*Updating orientation and Direction */
+                /* Updating orientation and Direction */
                 agentList[i].updateDirection();
                 agentList[i].updateOrientation();
 
@@ -166,10 +164,6 @@ public class Network {
                 }
             }
 
-            if (infectedList.element() == null) {
-                System.exit(1);
-            }
-
             /* Updating state from I to R */
             while (infectedList.element().currentStateDuration > Node.tauI) {
                 Node remove = infectedList.remove();
@@ -177,6 +171,9 @@ public class Network {
                 remove.currentStateDuration = 0;
                 for (i = 0; i < remove.isNeighbor.length; i++) {
                     remove.isNeighbor[i] = false;
+                }
+                if (infectedList.size() == 0) {
+                    System.exit(1);
                 }
             }
 
@@ -186,12 +183,11 @@ public class Network {
 
                 /* Infecting susceptible nodes in nearby regions */
                 int regX = n.regionIndexX, regY = n.regionIndexY;
-                int regMax = L / GRID_SIZE - 1;
+                int regMax = L / GRID_SIZE;
 
                 
                 n.wasNeighbor = n.isNeighbor;
 
-                n.isNeighbor = new boolean[n.wasNeighbor.length];
                 for (i = 0; i < n.isNeighbor.length; i++) {
                     n.isNeighbor[i] = false;
                 }
@@ -199,13 +195,13 @@ public class Network {
                 for (i = ((regX == 0) ? 0 : (regX - 1)); i <= ((regX == regMax) ? regMax : (regX + 1)); i++) {
                     for (j = ((regY == 0) ? 0 : (regY - 1)); j <= ((regY == regMax) ? regMax : (regY + 1)); j++) {
                         for (Node adj : grid[i][j].occupants) {
-                            if (Link.isConnected(n, adj)) {
+                            if (Link.isConnected(adj, n)) {
                                 if (adj.state == 'S') {
                                     y = adj.updateState('I', currentTime, y);
                                     adj.currentStateDuration = 0;
                                     temp.add(adj);
+                                    n.isNeighbor[adj.nodeIndex] = true;
                                 }
-                                n.isNeighbor[adj.nodeIndex] = true;
                                 if (!n.wasNeighbor[adj.nodeIndex]) {
                                     newNeighbors++;
                                 }
@@ -224,12 +220,7 @@ public class Network {
                 infectedList.add(n);
             }
 
-            /* Printing
-             *
-            System.out.println("Message broadcasted to " + y + " nodes.");
-             *
-             */
-
+            /* Repaint for Simulated Broadcast */
             if (sim != null) {
                 sim.repaint();
                 Thread.sleep(10);

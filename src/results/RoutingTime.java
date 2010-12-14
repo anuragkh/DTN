@@ -13,8 +13,8 @@ import java.io.*;
  */
 public class RoutingTime {
 
-    int[] routingTime;
-    double[] initDistance;
+    public int[] routingTime;
+    public double[] initDistance;
     Network network;
 
     public RoutingTime(Network network) {
@@ -63,6 +63,26 @@ public class RoutingTime {
         quickSort(arrayX, arrayY, lo == low ? lo + 1 : lo, n);
     }
 
+    public static double[] binSort(double arrayX[], int arrayY[]) {
+        double[] bin = new double[(int) (Math.sqrt(2) * Network.L) + 1];
+        int[] freq = new int[bin.length];
+
+        for (int i = 0; i < bin.length; i++) {
+            bin[i] = 0;
+            freq[i] = 0;
+        }
+        for (int i = 0; i < arrayX.length; i++) {
+            bin[(int) arrayX[i]] += arrayY[i];
+            freq[(int) arrayX[i]]++;
+        }
+        for (int i = 0; i < bin.length; i++) {
+            bin[i] = (freq[i] != 0) ? bin[i] / freq[i] : 0;
+        }
+
+        return bin;
+
+    }
+
     public void writeToFile() throws IOException {
 
         /* Sorting both arrays according to initDistance */
@@ -75,7 +95,7 @@ public class RoutingTime {
         for (int i = 0; i < initDistance.length; i++) {
             str = Double.toString(initDistance[i]) + "\t" + Integer.toString(routingTime[i]) + "\n";
             System.out.print(str);
-            output.append(str);
+            output.write(str);
         }
         output.close();
     }

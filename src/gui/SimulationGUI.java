@@ -27,9 +27,9 @@ public class SimulationGUI extends javax.swing.JFrame {
         javax.swing.GroupLayout SimulationPanelLayout = new javax.swing.GroupLayout(simulationPanel);
         simulationPanel.setLayout(SimulationPanelLayout);
         SimulationPanelLayout.setHorizontalGroup(
-                SimulationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 450, Short.MAX_VALUE));
+                SimulationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 550, Short.MAX_VALUE));
         SimulationPanelLayout.setVerticalGroup(
-                SimulationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 450, Short.MAX_VALUE));
+                SimulationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 550, Short.MAX_VALUE));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
