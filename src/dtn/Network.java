@@ -24,57 +24,8 @@ public class Network {
     int currentTime;
     SimulationGUI sim;
 
-    /* Constructor with Simulation */
-    public Network(double fracDA, double pTurn, double pRot, SimulationGUI sim, int gamma) {
 
-        currentTime = 0;
-
-        GRID_SIZE = (int) Link.gainM_0((Math.PI * gamma) / 180) + 1;
-        L = (int) Math.sqrt(NUM_NODES / rho);
-        
-        System.out.println("L :" + L + "  Grid Size: " + GRID_SIZE);
-
-
-        /* Initializing agentList */
-        agentList = new Node[NUM_NODES];
-        agentList[0] = new Node(L, 0, pTurn, pRot);
-        for (int i = 1; i < agentList.length; i++) {
-            agentList[i] = new Node(agentList[0], L, i, pTurn, pRot);
-        }
-
-        /* Assigning gamma to all nodes */
-        int numDA = (int) (fracDA * agentList.length);
-        for (Node n : agentList) {
-            if (n.nodeIndex < numDA) {
-                n.setGamma(gamma, gamma);
-            } else {
-                n.setGamma(360, 360);
-            }
-        }
-
-        /* Initializing Regions with coordinates */
-        grid = new Region[L / GRID_SIZE + 1][L / GRID_SIZE + 1];
-        for (int i = 0; i <= L / GRID_SIZE; i++) {
-            for (int j = 0; j <= L / GRID_SIZE; j++) {
-                grid[i][j] = new Region();
-            }
-        }
-        for (int i = 0; i < agentList.length; i++) {
-            grid[(int) (agentList[i].posX / GRID_SIZE)][(int) (agentList[i].posY / GRID_SIZE)].addAgent(agentList[i]);
-            agentList[i].regionIndexX = (int) (agentList[i].posX / GRID_SIZE);
-            agentList[i].regionIndexY = (int) (agentList[i].posY / GRID_SIZE);
-        }
-
-        /* Initializing infectedList */
-        infectedList = new LinkedList<Node>();
-        infectedList.add(agentList[0]);
-
-        /* Initializing simulator */
-        this.sim = sim;
-
-    }
-
-    /* Constructor without Simulation */
+     /* Constructor without Simulation */
     public Network(double fracDA, double pTurn, double pRot, int gamma) {
 
         currentTime = 0;
@@ -86,16 +37,16 @@ public class Network {
 
         /* Initializing agentList */
         agentList = new Node[NUM_NODES];
-        agentList[0] = new Node(L, 0, pTurn, pRot);
+        agentList[0] = new Node(null, L, 0, pTurn, pRot, 'I', true);
         for (int i = 1; i < agentList.length; i++) {
-            agentList[i] = new Node(agentList[0], L, i, pTurn, pRot);
+            agentList[i] = new Node(agentList[0], L, i, pTurn, pRot, 'S', false);
         }
 
 
         /* Assigning gamma to all nodes */
         int numDA = (int) (fracDA * agentList.length);
         for (Node n : agentList) {
-            if (n.nodeIndex < numDA) {
+            if (n.nodeIndex > NUM_NODES - numDA) {
                 n.setGamma(gamma, gamma);
             } else {
                 n.setGamma(360, 360);
@@ -123,6 +74,18 @@ public class Network {
         sim = null;
 
     }
+    
+    /* Constructor with Simulation */
+    public Network(double fracDA, double pTurn, double pRot, SimulationGUI sim, int gamma) {
+
+        this(fracDA, pTurn, pRot, gamma);
+
+        /* Initializing simulator */
+        this.sim = sim;
+
+    }
+
+   
 
     /* Broadcasts message across network */
     public void broadcast() throws MathException, InterruptedException {
@@ -131,7 +94,7 @@ public class Network {
         int y = 1;
         double newNeighbors;
 
-        while (y < 0.99 * NUM_NODES) {
+        while (y < 0.995 * NUM_NODES) {
 
             
             

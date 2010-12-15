@@ -63,20 +63,21 @@ public class RoutingTime {
         quickSort(arrayX, arrayY, lo == low ? lo + 1 : lo, n);
     }
 
-    public static double[] binSort(double arrayX[], int arrayY[]) {
-        double[] bin = new double[(int) (Math.sqrt(2) * Network.L) + 1];
-        int[] freq = new int[bin.length];
+    public static double[] binSort(double arrayX[], int arrayY[], int binSize) {
+        int dim = (int) Math.ceil(Math.sqrt(2) * Network.L / binSize);
+        double[] bin = new double[dim];
+        int[] freq = new int[dim];
 
         for (int i = 0; i < bin.length; i++) {
             bin[i] = 0;
             freq[i] = 0;
         }
         for (int i = 0; i < arrayX.length; i++) {
-            bin[(int) arrayX[i]] += arrayY[i];
-            freq[(int) arrayX[i]]++;
+            bin[(int) (arrayX[i] / binSize)] += arrayY[i];
+            freq[(int) (arrayX[i] / binSize)]++;
         }
         for (int i = 0; i < bin.length; i++) {
-            bin[i] = (freq[i] != 0) ? bin[i] / freq[i] : 0;
+            bin[i] = (freq[i] != 0) ? bin[i] / freq[i] : -1;
         }
 
         return bin;

@@ -25,7 +25,8 @@ public class GraphingData extends JPanel {
     protected void paintComponent(Graphics g) {
         setBackground(new java.awt.Color(255, 255, 255));
         RoutingTime rt = new RoutingTime(network);
-        routingTime = rt.binSort(rt.initDistance, rt.routingTime);
+        routingTime = rt.binSort(rt.initDistance, rt.routingTime, 5);
+        //routingTime = rt.routingTime;
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -66,12 +67,18 @@ public class GraphingData extends JPanel {
 
         /* Mark routingTime points. */
         g2.setPaint(Color.red);
+        double prevX = 0;
+        double prevY = 0;
         for (int i = 0; i < routingTime.length; i++) {
-            double x = PAD + i * xInc;
-            double y = h - PAD - scale * routingTime[i];
-            g2.fill(new Ellipse2D.Double(x - 1, y - 1, 2, 2));
-            if (i > 0) {
-                g2.drawLine((int) (x ), (int) (y ), (int) (PAD + (i - 1) * xInc ), (int) (h - PAD - scale * routingTime[i - 1] ));
+            if (routingTime[i] > 0) {
+                double x = PAD + i * xInc;
+                double y = h - PAD - scale * routingTime[i];
+                g2.fill(new Ellipse2D.Double(x - 1, y - 1, 2, 2));
+                /*if (i > 0) {
+                    g2.drawLine((int) (x), (int) (y), (int) (prevX), (int) (prevY));
+                }
+                prevX = x;
+                prevY = y;*/
             }
         }
     }

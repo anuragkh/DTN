@@ -47,41 +47,26 @@ public class Node {
     /* Poisson distribution function */
     PoissonDistributionImpl obj = new PoissonDistributionImpl(90);
 
-    public Node(double L, int index, double pturn, double prot) {
+    public Node(Node reference, double L, int index, double pTurn, double pRot, char state, boolean hasBeenInfected) {
 
         nodeIndex = index;
-        pTurn = pturn;
-        pRot = prot;
-        state = 'I';
+        Node.pTurn = pTurn;
+        Node.pRot = pRot;
+        this.state = state;
         posX = Math.random() * L;
         posY = Math.random() * L;
         currentDirection = (int) (Math.random() * 360);
         currentOrientation = (int) (Math.random() * 360);
         currentStateDuration = 0;
-        hasBeenInfected = true;
+        this.hasBeenInfected = hasBeenInfected;
         isNeighbor = new boolean[Network.NUM_NODES];
         for (boolean n : isNeighbor) {
             n = false;
         }
-
-    }
-
-    public Node(Node reference, double L, int index, double pturn, double prot) {
-
-        nodeIndex = index;
-        pTurn = pturn;
-        pRot = prot;
-        state = 'S';
-        posX = Math.random() * L;
-        posY = Math.random() * L;
-        currentDirection = (int) (Math.random() * 360);
-        currentOrientation = (int) (Math.random() * 360);
-        initDist = Math.sqrt(Math.pow(posX - reference.posX, 2) + Math.pow(posY - reference.posY, 2));
-        currentStateDuration = 0;
-        hasBeenInfected = false;
-        isNeighbor = new boolean[Network.NUM_NODES];
-        for (boolean n : isNeighbor) {
-            n = false;
+        if (reference != null) {
+            initDist = Math.sqrt(Math.pow(posX - reference.posX, 2) + Math.pow(posY - reference.posY, 2));
+        } else {
+            initDist = 0;
         }
 
     }
