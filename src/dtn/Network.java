@@ -6,6 +6,7 @@ package dtn;
 
 import gui.SimulationGUI;
 import java.util.LinkedList;
+import javax.swing.JFrame;
 import org.apache.commons.math.MathException;
 
 /**
@@ -25,12 +26,15 @@ public class Network {
     SimulationGUI sim;
 
 
-     /* Constructor without Simulation */
+    /* Constructor without Simulation */
     public Network(double fracDA, double pTurn, double pRot, int gamma) {
 
         currentTime = 0;
 
-        GRID_SIZE = (int) Link.gainM_0(Math.PI * gamma / 180) + 1;
+        if(fracDA == 0)
+            GRID_SIZE = 1;
+        else
+            GRID_SIZE = (int) Link.gainM_0(Math.PI * gamma / 180) + 1;
         L = (int) Math.sqrt(NUM_NODES / rho);
 
         System.out.println("L :" + L + "Grid Size: " + GRID_SIZE);
@@ -74,9 +78,9 @@ public class Network {
         sim = null;
 
     }
-    
+
     /* Constructor with Simulation */
-    public Network(double fracDA, double pTurn, double pRot, SimulationGUI sim, int gamma) {
+    public Network(double fracDA, double pTurn, double pRot, int gamma, SimulationGUI sim) {
 
         this(fracDA, pTurn, pRot, gamma);
 
@@ -85,8 +89,6 @@ public class Network {
 
     }
 
-   
-
     /* Broadcasts message across network */
     public void broadcast() throws MathException, InterruptedException {
 
@@ -94,10 +96,10 @@ public class Network {
         int y = 1;
         double newNeighbors;
 
-        while (y < 0.995 * NUM_NODES) {
+        while (y < NUM_NODES) {
 
-            
-            
+
+
             newNeighbors = 0;
             currentTime++;
 
@@ -148,7 +150,7 @@ public class Network {
                 int regX = n.regionIndexX, regY = n.regionIndexY;
                 int regMax = L / GRID_SIZE;
 
-                
+
                 n.wasNeighbor = n.isNeighbor;
 
                 for (i = 0; i < n.isNeighbor.length; i++) {
@@ -185,7 +187,8 @@ public class Network {
 
             /* Repaint for Simulated Broadcast */
             if (sim != null) {
-                sim.repaint();
+
+                (sim).repaint();
                 Thread.sleep(10);
             }
         }

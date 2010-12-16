@@ -23,7 +23,7 @@ public class MainGUI {
 
         final SimulationGUI sim = new SimulationGUI();
         final GraphingData gd = new GraphingData();
-        Network n = new Network(1, 0.0001, 0, sim, 60);
+        Network n = new Network(0, 0.0001, 0, 60, sim);
         sim.setNetwork(n);
         java.awt.EventQueue.invokeLater(new Runnable() {
 

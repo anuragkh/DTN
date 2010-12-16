@@ -53,7 +53,7 @@ public class SimulationGUI extends javax.swing.JFrame {
         });
     }
 
-    public void paint(Graphics2D g) throws InterruptedException {
+    public void paint(Graphics2D g) {
         simulationPanel.repaint();
         simulationPanel.revalidate();
     }

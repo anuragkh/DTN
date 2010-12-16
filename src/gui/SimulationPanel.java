@@ -14,6 +14,7 @@ import dtn.Network;
 import dtn.Node;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 /**
  *
@@ -49,7 +50,8 @@ public class SimulationPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    public void paint(Graphics g) {
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
         // Dynamically calculate size information
         if (network != null) {
             for (Node n : network.agentList) {

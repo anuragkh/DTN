@@ -10,7 +10,7 @@ package dtn;
  */
 public class Link {
 
-    static final double DELTA = 0.1;
+    static final double DELTA = 1;
     static final double K = 1;
     static final double Pt = 1;
     static final double GS_0 = 0.0316;
