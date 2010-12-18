@@ -16,7 +16,7 @@ import results.RoutingTime;
 public class Main {
 
     public static void main(String[] args) throws MathException, InterruptedException, IOException {
-        Network network = new Network(1, 0.0001, 0.1, 60);
+        Network network = new Network(1000, 150, 1, 0.0001, 0.1, 60);
         network.broadcast();
         RoutingTime data = new RoutingTime(network);
         data.writeToFile();

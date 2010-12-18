@@ -18,15 +18,45 @@ import results.RoutingTime;
 public class GraphingData extends JPanel {
 
     double[] routingTime;
+    double[] initDistance;
     final int PAD = 20;
-    private Network network;
 
+    public GraphingData(Network network, String type, int binSize) {
+        
+        /* Initializing data according to garaph type*/
+        RoutingTime rt = new RoutingTime(network);
+        if(type.equalsIgnoreCase("Average")) {
+            routingTime = RoutingTime.binSort(rt.getInitDistance(), rt.getInitDistance(), binSize);
+            initDistance = new double[routingTime.length];
+            for(int i=0; i < initDistance.length; i++) {
+                initDistance[i] = i * binSize;
+            }
+        } else if(type.equalsIgnoreCase("Scatter")) {
+            routingTime = rt.getRoutingTime();
+            initDistance = rt.getInitDistance();
+        }
+        
+        initComponents();
+    }
+
+    private void initComponents() {
+        setBackground(new java.awt.Color(255, 255, 255));
+        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 600, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 600, Short.MAX_VALUE)
+        );
+    }
     @Override
     protected void paintComponent(Graphics g) {
-        setBackground(new java.awt.Color(255, 255, 255));
-        RoutingTime rt = new RoutingTime(network);
-        routingTime = rt.binSort(rt.initDistance, rt.routingTime, 5);
-        //routingTime = rt.routingTime;
+
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -67,18 +97,11 @@ public class GraphingData extends JPanel {
 
         /* Mark routingTime points. */
         g2.setPaint(Color.red);
-        double prevX = 0;
-        double prevY = 0;
         for (int i = 0; i < routingTime.length; i++) {
             if (routingTime[i] > 0) {
-                double x = PAD + i * xInc;
+                double x = PAD + 6 * initDistance[i] * xInc;
                 double y = h - PAD - scale * routingTime[i];
                 g2.fill(new Ellipse2D.Double(x - 1, y - 1, 2, 2));
-                /*if (i > 0) {
-                    g2.drawLine((int) (x), (int) (y), (int) (prevX), (int) (prevY));
-                }
-                prevX = x;
-                prevY = y;*/
             }
         }
     }
@@ -93,7 +116,4 @@ public class GraphingData extends JPanel {
         return max;
     }
 
-    public void setNetwork(Network network) {
-        this.network = network;
-    }
 }

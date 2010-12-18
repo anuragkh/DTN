@@ -13,14 +13,12 @@ import java.io.*;
  */
 public class RoutingTime {
 
-    public int[] routingTime;
-    public double[] initDistance;
-    Network network;
+    private double[] routingTime;
+    private double[] initDistance;
 
     public RoutingTime(Network network) {
 
-        this.network = network;
-        routingTime = new int[Network.NUM_NODES];
+        routingTime = new double[Network.NUM_NODES];
         initDistance = new double[Network.NUM_NODES];
 
         /* Initializing routingTime and initDistance */
@@ -31,7 +29,15 @@ public class RoutingTime {
 
     }
 
-    public void quickSort(double arrayX[], int arrayY[], int low, int n) {
+    public double[] getRoutingTime() {
+        return routingTime;
+    }
+
+    public double[] getInitDistance() {
+        return initDistance;
+    }
+
+    public void quickSort(double arrayX[], double arrayY[], int low, int n) {
         int lo = low;
         int hi = n;
         if (lo >= n) {
@@ -47,7 +53,7 @@ public class RoutingTime {
             }
             if (lo < hi) {
                 double T1 = arrayX[lo];
-                int T2 = arrayY[lo];
+                double T2 = arrayY[lo];
                 arrayX[lo] = arrayX[hi];
                 arrayY[lo] = arrayY[hi];
                 arrayX[hi] = T1;
@@ -63,7 +69,7 @@ public class RoutingTime {
         quickSort(arrayX, arrayY, lo == low ? lo + 1 : lo, n);
     }
 
-    public static double[] binSort(double arrayX[], int arrayY[], int binSize) {
+    public static double[] binSort(double arrayX[], double arrayY[], int binSize) {
         int dim = (int) Math.ceil(Math.sqrt(2) * Network.L / binSize);
         double[] bin = new double[dim];
         int[] freq = new int[dim];
@@ -92,10 +98,7 @@ public class RoutingTime {
         /* Writing Data to file*/
 
         BufferedWriter output = new BufferedWriter(new FileWriter("RoutingTimeVsInitialDistance.txt"));
-        String str;
         for (int i = 0; i < initDistance.length; i++) {
-            str = Double.toString(initDistance[i]) + "\t" + Integer.toString(routingTime[i]) + "\n";
-            System.out.print(str);
             output.write(initDistance[i] + "\t" + routingTime[i] + "\n");
         }
         output.close();

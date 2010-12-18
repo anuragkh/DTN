@@ -4,9 +4,8 @@
  */
 package dtn;
 
-import gui.SimulationGUI;
+import gui.SimulationPanel;
 import java.util.LinkedList;
-import javax.swing.JFrame;
 import org.apache.commons.math.MathException;
 
 /**
@@ -15,29 +14,32 @@ import org.apache.commons.math.MathException;
  */
 public class Network {
 
-    public static final int NUM_NODES = 1000;
-    final double rho = 0.05;
-    int GRID_SIZE;
+    public static int NUM_NODES;
+    private static int GRID_SIZE;
     public static int L;
     public Node[] agentList;
-    LinkedList<Node> infectedList;
-    Region[][] grid;
-    int currentTime;
-    SimulationGUI sim;
+    private LinkedList<Node> infectedList;
+    private Region[][] grid;
+    private int currentTime;
+    private int numGrids;
+    private SimulationPanel sim;
+    public int y;
 
 
     /* Constructor without Simulation */
-    public Network(double fracDA, double pTurn, double pRot, int gamma) {
+    public Network(int N, int L, double fracDA, double pTurn, double pRot, int gamma) {
 
         currentTime = 0;
-
+        y = 1;
         if(fracDA == 0)
             GRID_SIZE = 1;
         else
-            GRID_SIZE = (int) Link.gainM_0(Math.PI * gamma / 180) + 1;
-        L = (int) Math.sqrt(NUM_NODES / rho);
+            GRID_SIZE = (int) Math.ceil(Link.gainM_0(Math.PI * gamma / 180)) ;
 
-        System.out.println("L :" + L + "Grid Size: " + GRID_SIZE);
+        NUM_NODES = N;
+        Network.L = L;
+
+        System.out.println("L :" + L + " Grid Size: " + GRID_SIZE);
 
         /* Initializing agentList */
         agentList = new Node[NUM_NODES];
@@ -50,7 +52,7 @@ public class Network {
         /* Assigning gamma to all nodes */
         int numDA = (int) (fracDA * agentList.length);
         for (Node n : agentList) {
-            if (n.nodeIndex > NUM_NODES - numDA) {
+            if (n.nodeIndex >= NUM_NODES - numDA) {
                 n.setGamma(gamma, gamma);
             } else {
                 n.setGamma(360, 360);
@@ -58,9 +60,10 @@ public class Network {
         }
 
         /* Initializing Regions with coordinates */
-        grid = new Region[L / GRID_SIZE + 1][L / GRID_SIZE + 1];
-        for (int i = 0; i <= L / GRID_SIZE; i++) {
-            for (int j = 0; j <= L / GRID_SIZE; j++) {
+        numGrids = (int) Math.ceil((double)L / GRID_SIZE);
+        grid = new Region[numGrids][numGrids];
+        for (int i = 0; i < numGrids; i++) {
+            for (int j = 0; j < numGrids; j++) {
                 grid[i][j] = new Region();
             }
         }
@@ -80,9 +83,9 @@ public class Network {
     }
 
     /* Constructor with Simulation */
-    public Network(double fracDA, double pTurn, double pRot, int gamma, SimulationGUI sim) {
+    public Network(int N, int L, double fracDA, double pTurn, double pRot, int gamma, SimulationPanel sim) {
 
-        this(fracDA, pTurn, pRot, gamma);
+        this(N, L, fracDA, pTurn, pRot, gamma);
 
         /* Initializing simulator */
         this.sim = sim;
@@ -93,12 +96,10 @@ public class Network {
     public void broadcast() throws MathException, InterruptedException {
 
         int i, j;
-        int y = 1;
+        
         double newNeighbors;
 
         while (y < NUM_NODES) {
-
-
 
             newNeighbors = 0;
             currentTime++;
@@ -146,16 +147,14 @@ public class Network {
             LinkedList<Node> temp = new LinkedList<Node>();
             for (Node n : infectedList) {
 
-                /* Infecting susceptible nodes in nearby regions */
-                int regX = n.regionIndexX, regY = n.regionIndexY;
-                int regMax = L / GRID_SIZE;
-
-
                 n.wasNeighbor = n.isNeighbor;
-
                 for (i = 0; i < n.isNeighbor.length; i++) {
                     n.isNeighbor[i] = false;
                 }
+
+                /* Infecting susceptible nodes in nearby regions */
+                int regX = n.regionIndexX, regY = n.regionIndexY;
+                int regMax = numGrids - 1;
 
                 for (i = ((regX == 0) ? 0 : (regX - 1)); i <= ((regX == regMax) ? regMax : (regX + 1)); i++) {
                     for (j = ((regY == 0) ? 0 : (regY - 1)); j <= ((regY == regMax) ? regMax : (regY + 1)); j++) {
