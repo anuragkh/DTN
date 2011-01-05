@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package results;
 
 import dtn.Network;
@@ -38,6 +34,8 @@ public class RoutingTime {
     }
 
     public void quickSort(double arrayX[], double arrayY[], int low, int n) {
+        
+        /* Quick sorts arrayX and makes corresponding changes in arrayY */
         int lo = low;
         int hi = n;
         if (lo >= n) {
@@ -70,6 +68,7 @@ public class RoutingTime {
     }
 
     public static double[] binSort(double arrayX[], double arrayY[], int binSize) {
+        /* Bin sorts arrayX, making corresponding changes in arrayY */
         int dim = (int) Math.ceil(Math.sqrt(2) * Network.L / binSize);
         double[] bin = new double[dim];
         int[] freq = new int[dim];
@@ -83,23 +82,35 @@ public class RoutingTime {
             freq[(int) (arrayX[i] / binSize)]++;
         }
         for (int i = 0; i < bin.length; i++) {
-            bin[i] = (freq[i] != 0) ? bin[i] / freq[i] : -1;
+            bin[i] = (freq[i] != 0) ? bin[i] / freq[i] : 0;
         }
 
         return bin;
 
     }
 
-    public void writeToFile() throws IOException {
+    public void writeToFile(String filename) throws IOException {
 
         /* Sorting both arrays according to initDistance */
-        quickSort(initDistance, routingTime, 0, initDistance.length - 1);
+            quickSort(initDistance, routingTime, 0, initDistance.length - 1);
 
         /* Writing Data to file*/
-
-        BufferedWriter output = new BufferedWriter(new FileWriter("RoutingTimeVsInitialDistance.txt"));
+        BufferedWriter output = new BufferedWriter(new FileWriter(filename));
         for (int i = 0; i < initDistance.length; i++) {
             output.write(initDistance[i] + "\t" + routingTime[i] + "\n");
+        }
+        output.close();
+    }
+
+    public void writeToFile(int binSize, String filename) throws IOException{
+
+        /* Bin sorting routinTime */
+        routingTime = RoutingTime.binSort(getInitDistance(), getRoutingTime(), binSize);
+
+        /* Writing Data to file*/
+        BufferedWriter output = new BufferedWriter(new FileWriter(filename));
+        for (int i = 0; i < routingTime.length; i++) {
+            output.write((i * binSize) + "\t" + routingTime[i] + "\n");
         }
         output.close();
     }

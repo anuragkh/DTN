@@ -1,13 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
- * SimulationPanel.java
- *
- * Created on Dec 12, 2010, 11:24:54 PM
- */
 package gui;
 
 import dtn.Network;
@@ -16,7 +6,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFrame;
 import org.apache.commons.math.MathException;
 
 /**
@@ -69,11 +58,13 @@ public class SimulationPanel extends javax.swing.JPanel implements Runnable {
                 } else {
                     g.fillOval((int) (3 * n.posX), (int) (3 * n.posY), 3, 3);
                 }
+
                 for (int i = 0; i < n.isNeighbor.length; i++) {
                     if (n.isNeighbor[i]) {
                         g.drawLine((int) (3 * n.posX) + 1, (int) (3 * n.posY) + 1, (int) (3 * network.agentList[i].posX) + 1, (int) (3 * network.agentList[i].posY) + 1);
                     }
                 }
+
             }
         }
     }
@@ -95,12 +86,14 @@ public class SimulationPanel extends javax.swing.JPanel implements Runnable {
         parent.getPRot().setEditable(false);
         parent.getPercentageDA().setEditable(false);
         parent.getGamma().setEditable(false);
+        parent.getGenerateButton().setEnabled(false);
+        parent.getGraphType().setEnabled(false);
+        parent.getBinSize().setEditable(false);
 
         runner.start();
     }
 
-    public void stop ()
-    {
+    public void stop () {
         runner.interrupt();
         runner = null;
     }
@@ -124,19 +117,11 @@ public class SimulationPanel extends javax.swing.JPanel implements Runnable {
         parent.getPRot().setEditable(true);
         parent.getPercentageDA().setEditable(true);
         parent.getGamma().setEditable(true);
-
-        /* Display Graph */
-
-        final GraphingData gd = new GraphingData(network, "Scatter", -1);
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                JFrame f = new JFrame();
-                f.add(gd);
-                f.setSize(600, 600);
-                f.setLocation(200, 200);
-                f.setVisible(true);
-            }
-        });
+        parent.getGenerateButton().setEnabled(true);
+        parent.getGraphType().setEnabled(true);
+        if(parent.getGraphType().getSelectedItem().toString().equalsIgnoreCase("Average")) {
+            parent.getBinSize().setEditable(true);
+        }
 
     }
 
@@ -146,6 +131,4 @@ public class SimulationPanel extends javax.swing.JPanel implements Runnable {
     private SimulationFrame parent;
     // End of variables declaration
 
-    
-    
 }

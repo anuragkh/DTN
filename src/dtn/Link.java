@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package dtn;
 
 /**
@@ -10,10 +6,10 @@ package dtn;
  */
 public class Link {
 
-    static final double DELTA = 1;
-    static final double K = 1;
-    static final double Pt = 1;
-    static final double GS_0 = 0.0316;
+    private static final double DELTA = 1;
+    private static final double K = 1;
+    private static final double Pt = 1;
+    private static final double GS_0 = 0.0316;
 
     public static double xij(Node i, Node j) {
 

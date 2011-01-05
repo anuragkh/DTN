@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package dtn;
 
 import gui.SimulationPanel;
@@ -24,6 +20,7 @@ public class Network {
     private int numGrids;
     private SimulationPanel sim;
     public int y;
+    public LinkedList<Double> newNeighbors;
 
 
     /* Constructor without Simulation */
@@ -32,14 +29,14 @@ public class Network {
         currentTime = 0;
         y = 1;
         if(fracDA == 0)
-            GRID_SIZE = 1;
+            GRID_SIZE = 2;
         else
             GRID_SIZE = (int) Math.ceil(Link.gainM_0(Math.PI * gamma / 180)) ;
 
         NUM_NODES = N;
         Network.L = L;
 
-        System.out.println("L :" + L + " Grid Size: " + GRID_SIZE);
+        System.out.println("fracDA = " + fracDA + "\tGamma = " + gamma);
 
         /* Initializing agentList */
         agentList = new Node[NUM_NODES];
@@ -77,6 +74,9 @@ public class Network {
         infectedList = new LinkedList<Node>();
         infectedList.add(agentList[0]);
 
+        /* Initializing newNeighbors */
+        newNeighbors = new LinkedList<Double>();
+
         /* Setting simulator to null */
         sim = null;
 
@@ -96,12 +96,11 @@ public class Network {
     public void broadcast() throws MathException, InterruptedException {
 
         int i, j;
-        
-        double newNeighbors;
+        double currentNewNeighbors;
 
         while (y < NUM_NODES) {
 
-            newNeighbors = 0;
+            currentNewNeighbors = 0;
             currentTime++;
 
             for (i = 0; i < NUM_NODES; i++) {
@@ -139,7 +138,7 @@ public class Network {
                     remove.isNeighbor[i] = false;
                 }
                 if (infectedList.size() == 0) {
-                    System.exit(1);
+                    System.exit(y);
                 }
             }
 
@@ -167,7 +166,7 @@ public class Network {
                                     n.isNeighbor[adj.nodeIndex] = true;
                                 }
                                 if (!n.wasNeighbor[adj.nodeIndex]) {
-                                    newNeighbors++;
+                                    currentNewNeighbors++;
                                 }
                             }
                         }
@@ -177,7 +176,8 @@ public class Network {
             }
 
             /* Average number of new neighbors encountered by each node in one time interval */
-            newNeighbors /= infectedList.size();
+            currentNewNeighbors /= infectedList.size();
+            newNeighbors.add(currentNewNeighbors);
 
             /* Appending newly infected nodes to the infectedList */
             for (Node n : temp) {
@@ -186,7 +186,6 @@ public class Network {
 
             /* Repaint for Simulated Broadcast */
             if (sim != null) {
-
                 (sim).repaint();
                 Thread.sleep(10);
             }

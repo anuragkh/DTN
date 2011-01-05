@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package main;
 
 import dtn.Network;
@@ -16,9 +12,19 @@ import results.RoutingTime;
 public class Main {
 
     public static void main(String[] args) throws MathException, InterruptedException, IOException {
-        Network network = new Network(1000, 150, 1, 0.0001, 0.1, 60);
-        network.broadcast();
-        RoutingTime data = new RoutingTime(network);
-        data.writeToFile();
+
+        int numNodes = 1000, L = 150, gamma = 60, binSize = 5, percentageDA;
+        double pRot = 0.0, pTurn = 0.0001, fracDA;
+
+        /* Graphs */
+        for (int i = 1; i <= 100; i++) {
+            for (percentageDA = 0; percentageDA <= 100; percentageDA += 10) {
+                fracDA = (double) percentageDA / 100;
+                Network network = new Network(numNodes, L, fracDA, pTurn, pRot, gamma);
+                network.broadcast();
+                (new RoutingTime(network)).writeToFile("RTvsID_sct_" + "_" + percentageDA + "_" + i + ".txt");
+                (new RoutingTime(network)).writeToFile(binSize, "RTvsID_avg_" + percentageDA + "_" + i + ".txt");
+            }
+        }
     }
 }

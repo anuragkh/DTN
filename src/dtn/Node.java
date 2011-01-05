@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package dtn;
 
 import org.apache.commons.math.MathException;
@@ -13,39 +9,44 @@ import org.apache.commons.math.distribution.*;
  */
 public class Node {
 
-    static double pRot;
-    static double pTurn;
-    static double velocity = 0.1;
-    static double tauI = 500;
-    static double tauR = 50;
+    private static double pRot;
+    private static double pTurn;
+    private static double velocity = 0.1;
+    public static double tauI = 500;
+    public static double tauR = 50;
+    
+    /* Node ID */
+    public int nodeIndex;
+
     /* Directioanal parameters */
     public int GAMMA_T;
     public int GAMMA_R;
-    int nodeIndex;
+    
 
     /* Time parameters */
     public int timeFirstInfected;
-    int currentStateDuration;
+    public int currentStateDuration;
 
     /* Distance Parameters */
     public double posX, posY;
     public double initDist;
 
     /* Direction Parameters */
-    int currentDirection;
-    int currentOrientation;
+    public int currentDirection;
+    public int currentOrientation;
+
     /* Stores the state of the Node */
     public char state;
 
     /* Stores the region to which the node belongs */
-    int regionIndexX;
-    int regionIndexY;
-    boolean hasBeenInfected;
+    public int regionIndexX;
+    public int regionIndexY;
+    private boolean hasBeenInfected;
     public boolean[] wasNeighbor;
     public boolean isNeighbor[];
 
     /* Poisson distribution function */
-    PoissonDistributionImpl obj = new PoissonDistributionImpl(90);
+    PoissonDistributionImpl poissonDistribution;
 
     public Node(Node reference, double L, int index, double pTurn, double pRot, char state, boolean hasBeenInfected) {
 
@@ -68,6 +69,8 @@ public class Node {
         } else {
             initDist = 0;
         }
+
+        poissonDistribution = new PoissonDistributionImpl(90);
 
     }
 
@@ -100,7 +103,7 @@ public class Node {
 
         if (Math.random() < pTurn) {
 
-            currentDirection += obj.inverseCumulativeProbability(Math.random());
+            currentDirection += poissonDistribution.inverseCumulativeProbability(Math.random());
 
         }
     }
@@ -109,7 +112,7 @@ public class Node {
 
         if (Math.random() < pRot) {
 
-            currentOrientation += obj.inverseCumulativeProbability(Math.random());
+            currentOrientation += poissonDistribution.inverseCumulativeProbability(Math.random());
         }
     }
 
