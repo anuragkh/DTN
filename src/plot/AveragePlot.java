@@ -46,4 +46,5 @@ public class AveragePlot {
         }
         output.close();
     }
+
 }
