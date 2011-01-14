@@ -5,7 +5,6 @@
 package plot;
 
 import java.io.*;
-import results.RoutingTime;
 
 /**
  *
@@ -29,7 +28,7 @@ public class AveragePlot {
             String line = null;
             while ((line = input.readLine()) != null) {
                 initDistance[j] += Double.parseDouble(line.substring(0, line.indexOf('\t')));
-                routingTime[j] += Double.parseDouble(line.substring(line.indexOf('\t')));
+                routingTime[j] += Double.parseDouble(line.substring(line.indexOf('\t') + 1));
                 j++;
             }
         }

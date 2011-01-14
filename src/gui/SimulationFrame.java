@@ -145,9 +145,9 @@ public class SimulationFrame extends javax.swing.JFrame {
 
         velocity.setText("0.1");
 
-        length.setText("150");
+        length.setText("100");
 
-        numNodes.setText("1000");
+        numNodes.setText("140");
 
         nLabel.setText("Number of Nodes:");
 

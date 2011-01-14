@@ -28,10 +28,11 @@ public class Network {
 
         currentTime = 0;
         y = 1;
-        if(fracDA == 0)
+        if (fracDA == 0) {
             GRID_SIZE = 2;
-        else
-            GRID_SIZE = (int) Math.ceil(Link.gainM_0(Math.PI * gamma / 180)) ;
+        } else {
+            GRID_SIZE = (int) Math.ceil(Link.gainM_0(Math.PI * gamma / 180));
+        }
 
         NUM_NODES = N;
         Network.L = L;
@@ -57,7 +58,7 @@ public class Network {
         }
 
         /* Initializing Regions with coordinates */
-        numGrids = (int) Math.ceil((double)L / GRID_SIZE);
+        numGrids = (int) Math.ceil((double) L / GRID_SIZE);
         grid = new Region[numGrids][numGrids];
         for (int i = 0; i < numGrids; i++) {
             for (int j = 0; j < numGrids; j++) {
@@ -134,8 +135,8 @@ public class Network {
                 Node remove = infectedList.remove();
                 remove.updateState('R', currentTime, y);
                 remove.currentStateDuration = 0;
-                for (i = 0; i < remove.isNeighbor.length; i++) {
-                    remove.isNeighbor[i] = false;
+                for (i = 0; i < NUM_NODES; i++) {
+                    remove.isNeighbor[i] = remove.isInfectedNeighbor[i] = false;
                 }
                 if (infectedList.size() == 0) {
                     System.exit(y);
@@ -146,9 +147,9 @@ public class Network {
             LinkedList<Node> temp = new LinkedList<Node>();
             for (Node n : infectedList) {
 
-                n.wasNeighbor = n.isNeighbor;
+                System.arraycopy(n.isNeighbor, 0, n.wasNeighbor, 0, n.isNeighbor.length);
                 for (i = 0; i < n.isNeighbor.length; i++) {
-                    n.isNeighbor[i] = false;
+                    n.isInfectedNeighbor[i] = n.isNeighbor[i] = false;
                 }
 
                 /* Infecting susceptible nodes in nearby regions */
@@ -158,13 +159,14 @@ public class Network {
                 for (i = ((regX == 0) ? 0 : (regX - 1)); i <= ((regX == regMax) ? regMax : (regX + 1)); i++) {
                     for (j = ((regY == 0) ? 0 : (regY - 1)); j <= ((regY == regMax) ? regMax : (regY + 1)); j++) {
                         for (Node adj : grid[i][j].occupants) {
-                            if (Link.isConnected(adj, n)) {
+                            if (adj != n && Link.isConnected(adj, n)) {
                                 if (adj.state == 'S') {
                                     y = adj.updateState('I', currentTime, y);
                                     adj.currentStateDuration = 0;
                                     temp.add(adj);
-                                    n.isNeighbor[adj.nodeIndex] = true;
+                                    n.isInfectedNeighbor[adj.nodeIndex] = true;
                                 }
+                                n.isNeighbor[adj.nodeIndex] = true;
                                 if (!n.wasNeighbor[adj.nodeIndex]) {
                                     currentNewNeighbors++;
                                 }
@@ -187,9 +189,11 @@ public class Network {
             /* Repaint for Simulated Broadcast */
             if (sim != null) {
                 (sim).repaint();
-                Thread.sleep(10);
+                //Thread.sleep(10);
             }
         }
+
+        (new results.NewNeighbors(this)).print();
         System.out.println("Brodcast Time: " + currentTime);
     }
 }

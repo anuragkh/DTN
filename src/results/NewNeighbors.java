@@ -19,6 +19,15 @@ public class NewNeighbors {
         }
     }
 
+    public void print() {
+        double avg = 0;
+        for (int i = 0; i < newNeighbors.length; i++) {
+            System.out.println(newNeighbors[i] + "\n");
+            avg += newNeighbors[i];
+        }
+        avg /= newNeighbors.length;
+        System.out.println("Avg=" + avg);
+    }
     public void writeToFile(String filename) throws IOException {
 
         /* Writing Data to file*/

@@ -12,7 +12,7 @@ public class Node {
     private static double pRot;
     private static double pTurn;
     private static double velocity = 0.1;
-    public static double tauI = 500;
+    public static double tauI = 1300;
     public static double tauR = 50;
     
     /* Node ID */
@@ -43,10 +43,13 @@ public class Node {
     public int regionIndexY;
     private boolean hasBeenInfected;
     public boolean[] wasNeighbor;
-    public boolean isNeighbor[];
+    public boolean[] isNeighbor;
+    public boolean[] wasInfectedNeighbor;
+    public boolean[] isInfectedNeighbor;
 
     /* Poisson distribution function */
     PoissonDistributionImpl poissonDistribution;
+
 
     public Node(Node reference, double L, int index, double pTurn, double pRot, char state, boolean hasBeenInfected) {
 
@@ -61,8 +64,10 @@ public class Node {
         currentStateDuration = 0;
         this.hasBeenInfected = hasBeenInfected;
         isNeighbor = new boolean[Network.NUM_NODES];
-        for (boolean n : isNeighbor) {
-            n = false;
+        isInfectedNeighbor = new boolean[Network.NUM_NODES];
+        wasNeighbor = new boolean[Network.NUM_NODES];
+        for (int i = 0; i < Network.NUM_NODES; i++) {
+            isNeighbor[i] = isInfectedNeighbor[i] = false;
         }
         if (reference != null) {
             initDist = Math.sqrt(Math.pow(posX - reference.posX, 2) + Math.pow(posY - reference.posY, 2));

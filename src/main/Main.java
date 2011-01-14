@@ -1,9 +1,10 @@
 package main;
 
 import dtn.Network;
+import java.io.File;
 import java.io.IOException;
 import org.apache.commons.math.MathException;
-import results.RoutingTime;
+import results.*;
 
 /**
  *
@@ -13,17 +14,22 @@ public class Main {
 
     public static void main(String[] args) throws MathException, InterruptedException, IOException {
 
-        int numNodes = 1000, L = 150, gamma = 60, binSize = 5, percentageDA;
+        int numNodes = 140, L = 100, gamma = 60, binSize = 5, percentageDA;
         double pRot = 0.0, pTurn = 0.0001, fracDA;
 
         /* Graphs */
-        for (int i = 1; i <= 100; i++) {
+        for (int i = 1; i <= 5; i++) {
             for (percentageDA = 0; percentageDA <= 100; percentageDA += 10) {
                 fracDA = (double) percentageDA / 100;
                 Network network = new Network(numNodes, L, fracDA, pTurn, pRot, gamma);
                 network.broadcast();
-                (new RoutingTime(network)).writeToFile("RTvsID_sct_" + "_" + percentageDA + "_" + i + ".txt");
-                (new RoutingTime(network)).writeToFile(binSize, "RTvsID_avg_" + percentageDA + "_" + i + ".txt");
+                File f1 = new File("E:/Project/Results/neighbors/" + percentageDA + "/"), f2 = new File("E:/Project/Results/sct/" + percentageDA + "/"), f3 = new File("E:/Project/Results/avg/" + percentageDA + "/");
+                f1.mkdir();
+                f2.mkdir();
+                f3.mkdir();
+                (new NewNeighbors(network)).writeToFile("E:/Project/Results/neighbors/" + percentageDA + "/AvgNewNeighbors_" + i + ".txt");
+                (new RoutingTime(network)).writeToFile("E:/Project/Results/sct/" + percentageDA + "/RTvsID_" + i + ".txt");
+                (new RoutingTime(network)).writeToFile(binSize, "E:/Project/Results/avg/" + percentageDA + "/RTvsID_" + i + ".txt");
             }
         }
     }
