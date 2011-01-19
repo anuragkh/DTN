@@ -37,7 +37,7 @@ public class Network {
         NUM_NODES = N;
         Network.L = L;
 
-        System.out.println("fracDA = " + fracDA + "\tGamma = " + gamma);
+        //System.out.println("fracDA = " + fracDA + "\tGamma = " + gamma);
 
         /* Initializing agentList */
         agentList = new Node[NUM_NODES];
@@ -139,6 +139,7 @@ public class Network {
                     remove.isNeighbor[i] = remove.isInfectedNeighbor[i] = false;
                 }
                 if (infectedList.size() == 0) {
+                    System.out.println("Failure.");
                     System.exit(y);
                 }
             }
@@ -193,7 +194,7 @@ public class Network {
             }
         }
 
-        (new results.NewNeighbors(this)).print();
-        System.out.println("Brodcast Time: " + currentTime);
+        //(new results.NewNeighbors(this)).print();
+        //System.out.println("Brodcast Time: " + currentTime);
     }
 }
