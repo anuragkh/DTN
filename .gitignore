@@ -1,0 +1,6 @@
+# Idea files
+.idea
+DTN.iml
+
+# Build directories
+target
